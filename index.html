@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>VINO: Revisiting 3D Representation Learning with Volume Transformers</title>
+        <link rel="preload" href="fonts/lato/lato-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="fonts/lato/lato-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="stylesheet" href="fonts/lato/stylesheet.css">
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body>
+        <header id="header">
+            <div class="column">
+                <h1 id="title"><strong>VINO</strong>: Revisiting 3D Representation Learning with Volume Transformers</h1>
+                <p id="authors">
+                    <span><a href="https://adriankruse.github.io/" target="_blank" class="author-link">Adrian Kruse</a><sup>1,*</sup></span>
+                    <span><a href="https://yilmazkadir.github.io/" target="_blank" class="author-link">Kadir Yilmaz</a><sup>1,*</sup></span>
+                    <span><a href="https://daandegeus.com" target="_blank" class="author-link">Daan de Geus</a><sup>2</sup></span>
+                    <span><a href="https://francisengelmann.github.io/" target="_blank" class="author-link">Francis Engelmann</a><sup>3</sup></span>
+                    <span><a href="https://scholar.google.com/citations?user=ZcULDB0AAAAJ" target="_blank" class="author-link">Bastian Leibe</a><sup>1</sup></span>
+                </p>
+                <p id="affiliations"><span><sup>1</sup>RWTH Aachen University</span> <span><sup>2</sup>Eindhoven University of Technology</span> <span><sup>3</sup>USI Lugano</span></p>
+                <p id="equal-contrib"><sup>*</sup>Equal contribution</p>
+                <div id="links">
+                    <a id="paper" href="https://arxiv.org/pdf/2611.07176" target="_blank">Paper</a>
+                    <a id="arxiv" href="https://arxiv.org/abs/2611.07176" target="_blank">arXiv</a>
+                    <a id="code">Code (soon)</a>
+                    <a id="models">Weights (soon)</a>
+                </div>
+            </div>
+        </header>
+
+        <div id="main">
+            <section class="section">
+                <div class="hero-clips">
+                    <figure>
+                        <video src="assets/vino/indoor_loop.mp4" poster="assets/vino/indoor_loop_poster.webp" width="1280" height="720" autoplay muted loop playsinline></video>
+                        <figcaption>Indoor: VINO, with 2D distillation</figcaption>
+                    </figure>
+                    <figure>
+                        <video src="assets/vino/kitti_drive.mp4" poster="assets/vino/kitti_drive_poster.webp" width="960" height="540" autoplay muted loop playsinline></video>
+                        <figcaption>Outdoor: VINO, before 2D distillation</figcaption>
+                    </figure>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Abstract</h2>
+                <p>
+                    Self-supervised learning has given rise to vision foundation models that learn general-purpose image representations transferable across downstream tasks, yet representation learning for 3D scenes has not achieved comparable success.
+                    Motivated by this, we identify key limitations of current 3D representation learning approaches and revisit their core design choices.
+                    We first replace the commonly used hierarchical PTv3 backbone with the Volume Transformer, a ViT-like architecture for 3D scenes.
+                    We then redesign two core objectives of modern approaches built around student–teacher networks: matching representations across views and predicting masked content from visible context.
+                    For the first objective, we separate the roles of teacher and student: the teacher provides clean, consistent targets while the student learns invariance to stronger perturbations.
+                    For the second objective, we prevent the student from accessing the masked geometry and instead require it to infer missing representations from visible context only.
+                    Finally, we redesign 2D-to-3D knowledge distillation, replacing direct regression of view-dependent image features with view-consistent supervision.
+                    Together, these changes form VINO, a framework that learns semantic representations of 3D scenes without labels.
+                    VINO substantially improves dense linear probing across indoor and outdoor benchmarks and transfers strongly to out-of-domain settings.
+                </p>
+            </section>
+
+            <section class="section">
+                <h2>Compare the Features</h2>
+                <p>
+                    All three models learn without labels, from point clouds only.
+                    Sonata (Volt) is Sonata's training with the Volume Transformer (Volt), the same backbone as VINO.
+                    Here VINO is trained without its 2D distillation stage.
+                    Click a point to see which points have similar features.
+                </p>
+                <div class="viewer" id="viewer">
+                    <div class="viewer-scenes" data-group="scene"></div>
+                    <div class="viewer-tabs" data-group="model"></div>
+                    <div class="viewer-canvas">
+                        <div class="viewer-group viewer-toggle" data-group="mode"></div>
+                    </div>
+                    <div class="viewer-status"></div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Method</h2>
+                <figure class="figure">
+                    <img src="assets/vino/method.webp" width="2408" height="1312" alt="VINO pre-training: student and EMA teacher with local, masked and balanced-target losses">
+                </figure>
+                <p>
+                    <strong>Self Supervised Framework:</strong>
+                    We sample overlapping global and local views from a 3D scene.
+                    The EMA teacher encodes clean global views and softly assigns their tokens to learned prototypes, producing balanced targets.
+                    The prototypes are optimized independently by encouraging balanced and consistent assignments across global views.
+                    The student encodes strongly augmented local views and masked global views.
+                    For each local-view token, a projection head predicts the target of the matching global-view token.
+                    For the masked global views, a cross-attention-only predictor uses the visible tokens to predict the targets at the masked locations.
+                </p>
+                <p>
+                    <strong>Distillation from a 2D VFM:</strong>
+                    The best-performing 3D encoders use distillation from pretrained 2D vision foundation models (VFMs).
+                    We find it works best to pretrain fully self-supervised first and add 2D-to-3D supervision only in a shorter second stage, in which the 3D encoder predicts the assignments of 2D VFM features to prototypes trained to be consistent across views.
+                </p>
+            </section>
+
+            <section class="section">
+                <h2>Results</h2>
+                <p>
+                    Linear probing for 3D semantic segmentation (mIoU).
+                    The first table's VINO is the model in the viewer above.
+                </p>
+                    <div class="results-table">
+                        <table>
+                            <caption>3D-only pretraining</caption>
+                            <colgroup><col class="method"><col class="backbone"><col span="6"></colgroup>
+                            <thead>
+                                <tr><th rowspan="2">Method</th><th rowspan="2">Backbone</th><th colspan="3" class="group">Indoor</th><th colspan="3" class="group">Outdoor</th></tr>
+                                <tr><th>ScanNet200</th><th>ScanNet</th><th>ScanNet++</th><th>nuScenes</th><th>Sem.KITTI</th><th>Waymo</th></tr>
+                            </thead>
+                            <tbody>
+                            <tr class="reference"><td>Supervised<sup>&dagger;</sup></td><td>Volt-B <span class="params">(94.3&#8239;M)</span></td><td>36.2</td><td>77.7</td><td>51.7</td><td>81.3</td><td>70.6</td><td>71.5</td></tr>
+                            <tr><td>LAM3C</td><td>PTv3-B <span class="params">(108.4&#8239;M)</span></td><td>25.3</td><td>66.0</td><td>34.2</td><td class="na">&ndash;</td><td class="na">&ndash;</td><td class="na">&ndash;</td></tr>
+                            <tr><td>MSM</td><td>HUNet <span class="params">(67.6&#8239;M)</span></td><td>26.8</td><td>68.7</td><td class="na">&ndash;</td><td class="na">&ndash;</td><td class="na">&ndash;</td><td class="na">&ndash;</td></tr>
+                            <tr><td>Sonata</td><td>PTv3-B <span class="params">(108.4&#8239;M)</span></td><td>29.3</td><td>72.5</td><td class="second">38.9</td><td>66.1</td><td>62.0</td><td>60.5</td></tr>
+                            <tr><td>PointINS</td><td>PTv3-B <span class="params">(108.4&#8239;M)</span></td><td>29.6</td><td>72.4</td><td class="na">&ndash;</td><td>74.6</td><td>68.0</td><td class="na">&ndash;</td></tr>
+                            <tr><td>DOS</td><td>PTv3-B <span class="params">(108.4&#8239;M)</span></td><td class="second">30.7</td><td class="second">73.9</td><td class="na">&ndash;</td><td class="second">74.8</td><td class="second">68.3</td><td class="second">67.0</td></tr>
+                            <tr class="ours"><td><strong>VINO</strong> (ours)</td><td>Volt-B <span class="params">(85.7&#8239;M)</span></td><td class="best">35.9</td><td class="best">76.9</td><td class="best">42.4</td><td class="best">76.7</td><td class="best">70.7</td><td class="best">68.6</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="results-table">
+                        <table>
+                            <caption>Pretraining with 2D supervision</caption>
+                            <colgroup><col class="method"><col class="backbone"><col span="6"></colgroup>
+                            <thead>
+                                <tr><th rowspan="2">Method</th><th rowspan="2">Backbone</th><th colspan="3" class="group">Indoor</th><th colspan="3" class="group">Outdoor</th></tr>
+                                <tr><th>ScanNet200</th><th>ScanNet</th><th>ScanNet++</th><th>nuScenes</th><th>Sem.KITTI</th><th>Waymo</th></tr>
+                            </thead>
+                            <tbody>
+                            <tr class="reference"><td>Supervised<sup>&dagger;</sup></td><td>Volt-B <span class="params">(94.3&#8239;M)</span></td><td>36.2</td><td>77.7</td><td>51.7</td><td>81.3</td><td>70.6</td><td>71.5</td></tr>
+                            <tr><td>LargeAD</td><td>MinkUNet <span class="params">(37.9&#8239;M)</span></td><td class="na">&ndash;</td><td class="na">&ndash;</td><td class="na">&ndash;</td><td>47.8</td><td>35.8</td><td>36.1</td></tr>
+                            <tr><td>ScaLR</td><td>WaffleIron <span class="params">(59.4&#8239;M)</span></td><td class="na">&ndash;</td><td class="na">&ndash;</td><td class="na">&ndash;</td><td>67.8</td><td>55.8</td><td class="na">&ndash;</td></tr>
+                            <tr><td>Concerto</td><td>PTv3-B <span class="params">(108.4&#8239;M)</span></td><td class="second">37.4</td><td>77.3</td><td class="second">45.6</td><td>74.2</td><td>66.6</td><td>62.2</td></tr>
+                            <tr><td>Utonia</td><td>PTv3-B <span class="params">(137.3&#8239;M)</span></td><td>36.4</td><td class="second">77.7</td><td>44.7</td><td class="second">75.5</td><td class="second">67.7</td><td class="second">63.8</td></tr>
+                            <tr class="ours"><td><strong>VINO</strong> (ours)</td><td>Volt-B <span class="params">(85.7&#8239;M)</span></td><td class="best">40.4</td><td class="best">77.9</td><td class="best">48.2</td><td class="best">80.6</td><td class="best">71.1</td><td class="best">70.6</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                <p class="results-note">
+                    DOS and PointINS outdoor results use PTv3-S.
+                    <sup>&dagger;</sup>Trained end-to-end with Volt's decoder; serves as a reference.
+                </p>
+            </section>
+
+            <section class="section">
+                <h2>BibTeX</h2>
+                <div class="bibtex">
+                    <button type="button">Copy</button>
+<pre><code>@article{kruse2026vino,
+  title   = {{VINO}: Revisiting 3D Representation Learning with Volume Transformers},
+  author  = {Kruse, Adrian and Yilmaz, Kadir and de Geus, Daan and Engelmann, Francis and Leibe, Bastian},
+  journal = {arXiv preprint arXiv:2611.07176},
+  year    = {2026}
+}</code></pre>
+                </div>
+            </section>
+        </div>
+
+        <script>
+            // The hero clips play slower than they were rendered
+            for (const video of document.querySelectorAll('.hero-clips video')) video.defaultPlaybackRate = video.playbackRate = 0.75;
+
+            const bibtex = document.querySelector('.bibtex');
+            bibtex.querySelector('button').addEventListener('click', async (event) => {
+                await navigator.clipboard.writeText(bibtex.querySelector('code').textContent);
+                event.target.textContent = 'Copied';
+                setTimeout(() => { event.target.textContent = 'Copy'; }, 1500);
+            });
+        </script>
+        <script type="importmap">
+            {"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
+        </script>
+        <script type="module" src="js/viewer.js"></script>
+    </body>
+</html>

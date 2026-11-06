@@ -1,0 +1,620 @@
+* {
+    font-family: 'Lato', sans-serif;
+}
+
+body {
+    margin: 0;
+    background: white;
+    color: #27272a;
+}
+
+a {
+    color: #0f6674;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* One centred column for everything; it grows with the window in the same steps as
+   wimmerth.github.io/anyup, and so do the font sizes further down. */
+.column,
+#main {
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+@media (min-width: 769px) {
+    .column, #main { width: 71vw; padding: 0; }
+}
+
+@media (min-width: 992px) {
+    .column, #main { width: 61vw; }
+}
+
+@media (min-width: 1200px) {
+    .column, #main { width: 52vw; }
+}
+
+@media (min-width: 1600px) {
+    .column, #main { width: 46vw; }
+}
+
+@media (min-width: 2000px) {
+    .column, #main { width: 40vw; }
+}
+
+@media (min-width: 2400px) {
+    .column, #main { width: 36vw; }
+}
+
+/* Header: everything centred */
+#header {
+    padding: 56px 0 8px;
+    text-align: center;
+}
+
+#title {
+    margin: 0;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: #18181b;
+}
+
+#authors,
+#affiliations {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2px 20px;
+}
+
+#authors {
+    margin: 24px 0 0;
+    font-size: 18px;
+}
+
+.author-link {
+    color: #2563eb;
+}
+
+#affiliations {
+    margin: 12px 0 0;
+    font-size: 16px;
+    color: #52525b;
+}
+
+#equal-contrib {
+    margin: 6px 0 0;
+    font-size: 14px;
+    color: #71717a;
+}
+
+#links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 32px;
+}
+
+#links a {
+    display: flex;
+    align-items: center;
+    padding: 9px 18px;
+    border: 1px solid #e4e4e7;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    color: #18181b;
+    font-size: 15px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#links a:hover {
+    border-color: #a1a1aa;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    text-decoration: none;
+}
+
+/* not out yet (no link): muted, no hover */
+#links a:not([href]),
+#links a:not([href]):hover {
+    border-color: #e4e4e7;
+    box-shadow: none;
+    color: #a1a1aa;
+    cursor: default;
+}
+
+#links a:not([href])::before {
+    opacity: 0.4;
+}
+
+/* the main link (paper) is filled */
+#links a:first-child {
+    border-color: #18181b;
+    background: #18181b;
+    color: white;
+}
+
+#links a:first-child::before {
+    filter: invert(1);
+}
+
+#links a::before {
+    content: "";
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+#links #paper::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2318181b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpolyline points='14 2 14 8 20 8'/%3E%3Cline x1='8' y1='13' x2='16' y2='13'/%3E%3Cline x1='8' y1='17' x2='16' y2='17'/%3E%3C/svg%3E");
+}
+
+#links #arxiv::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2318181b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='3' width='20' height='5' rx='1'/%3E%3Cpath d='M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8'/%3E%3Cline x1='10' y1='12' x2='14' y2='12'/%3E%3C/svg%3E");
+}
+
+#links #code::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024' fill='%2318181b'%3E%3Cpath d='M512.008 12.642c-282.738 0-512.008 229.218-512.008 511.998 0 226.214 146.704 418.132 350.136 485.836 25.586 4.738 34.992-11.11 34.992-24.632 0-12.204-0.48-52.542-0.696-95.324-142.448 30.976-172.504-60.41-172.504-60.41-23.282-59.176-56.848-74.916-56.848-74.916-46.452-31.778 3.51-31.124 3.51-31.124 51.4 3.61 78.476 52.766 78.476 52.766 45.672 78.27 119.776 55.64 149.004 42.558 4.588-33.086 17.852-55.68 32.506-68.464-113.73-12.942-233.276-56.85-233.276-253.032 0-55.898 20.004-101.574 52.76-137.428-5.316-12.9-22.854-64.972 4.952-135.5 0 0 43.006-13.752 140.84 52.49 40.836-11.348 84.636-17.036 128.154-17.234 43.502 0.198 87.336 5.886 128.256 17.234 97.734-66.244 140.656-52.49 140.656-52.49 27.872 70.528 10.35 122.6 5.036 135.5 32.82 35.856 52.694 81.532 52.694 137.428 0 196.654-119.778 239.95-233.79 252.624 18.364 15.89 34.724 47.046 34.724 94.812 0 68.508-0.596 123.644-0.596 140.508 0 13.628 9.222 29.594 35.172 24.566 203.322-67.776 349.842-259.626 349.842-485.768 0-282.78-229.234-511.998-511.992-511.998z'/%3E%3C/svg%3E");
+}
+
+#links #models::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2318181b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='12 2 2 7 12 12 22 7 12 2'/%3E%3Cpolyline points='2 17 12 22 22 17'/%3E%3Cpolyline points='2 12 12 17 22 12'/%3E%3C/svg%3E");
+}
+
+/* Content */
+#main {
+    padding-top: 48px;
+    padding-bottom: 40px;
+}
+
+.section {
+    margin: 0 0 56px;
+}
+
+.section h2 {
+    margin: 0 0 24px;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-align: center;
+    color: #18181b;
+}
+
+.section p {
+    margin: 0;
+    line-height: 1.8;
+    text-align: justify;
+    color: #3f3f46;
+}
+
+.figure {
+    margin: 0 0 24px;
+}
+
+.figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* Teaser: indoor and outdoor clips side by side, stacked on phones */
+.hero-clips {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.hero-clips figure {
+    margin: 0;
+}
+
+.hero-clips video {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 0 0 1px #e4e4e7;  /* the clips' white backgrounds would melt into the page */
+}
+
+.hero-clips figcaption {
+    margin-top: 6px;
+    color: #71717a;
+    font-size: 13px;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .hero-clips {
+        grid-template-columns: 1fr;
+    }
+}
+
+.section p + p {
+    margin-top: 16px;
+}
+
+.section p strong {
+    color: #18181b;
+}
+
+/* Results tables (booktabs style) */
+.results-table {
+    margin-top: 28px;
+    overflow-x: auto;
+}
+
+.results-table table {
+    width: 100%;
+    min-width: 780px;  /* desktop layout; scrolls sideways on phones */
+    table-layout: fixed;  /* same columns in both tables */
+    border-collapse: collapse;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+    color: #27272a;
+}
+
+.results-table caption {
+    padding-bottom: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: left;
+    color: #18181b;
+}
+
+.results-table th,
+.results-table td {
+    padding: 6px 8px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.results-table col.method {
+    width: 17%;
+}
+
+.results-table col.backbone {
+    width: 20%;
+}
+
+.results-table th[rowspan],
+.results-table td:nth-child(-n+2) {
+    text-align: left;
+}
+
+.results-table thead tr:first-child th {
+    border-top: 1.5px solid #18181b;
+}
+
+.results-table thead tr:last-child th,
+.results-table thead th[rowspan] {
+    border-bottom: 1px solid #a1a1aa;
+}
+
+.results-table th.group {
+    padding-bottom: 2px;
+    border-bottom: 1px solid #d4d4d8;
+    color: #52525b;
+    font-weight: 400;
+}
+
+.results-table tbody tr:last-child td {
+    border-bottom: 1.5px solid #18181b;
+}
+
+.results-table .params {
+    font-size: 12px;
+    color: #71717a;
+}
+
+.results-table .reference td {
+    background: #f4f4f5;
+    color: #52525b;
+    font-style: italic;
+}
+
+.results-table .reference td:nth-child(n+2) {
+    font-style: normal;
+}
+
+.results-table .ours td {
+    border-top: 1px solid #e4e4e7;
+}
+
+.results-table td.best {
+    background: #dbeafe;
+    font-weight: 700;
+}
+
+.results-table td.second {
+    background: #eff6ff;
+}
+
+.results-table td.na {
+    color: #a1a1aa;
+}
+
+.section p.results-note {
+    margin-top: 14px;
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: left;
+    color: #71717a;
+}
+
+/* Feature viewer */
+.viewer {
+    margin-top: 20px;
+    border: 1px solid #e4e4e7;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.viewer-scenes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 8px;
+    padding: 12px 12px 0;
+}
+
+.viewer-scenes button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 8px;
+    border: 1px solid #e4e4e7;
+    border-radius: 10px;
+    background: #fafafa;
+    color: #52525b;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.viewer-scenes button:hover {
+    background: #f4f4f5;
+}
+
+.viewer-scenes button.active {
+    border-color: #18181b;
+    background: white;
+    color: #18181b;
+}
+
+.viewer-scenes img {
+    width: 100%;
+    height: 64px;
+    object-fit: contain;
+}
+
+/* Encoders as tabs across the viewer */
+.viewer-tabs {
+    display: flex;
+    margin-top: 12px;
+    padding: 0 12px;
+    border-bottom: 1px solid #e4e4e7;
+}
+
+.viewer-tabs button {
+    flex: 1;
+    margin-bottom: -1px;
+    padding: 10px 8px 9px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: none;
+    color: #71717a;
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.viewer-tabs button:hover {
+    color: #18181b;
+}
+
+.viewer-tabs button.active {
+    border-bottom-color: #18181b;
+    color: #18181b;
+    font-weight: 700;
+}
+
+/* Segmented control: a grey track, the active option a raised white segment */
+.viewer-group {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 10px;
+    background: #f4f4f5;
+}
+
+/* Color mode floats in the canvas corner */
+.viewer-toggle {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(6px);
+}
+
+.viewer-group button {
+    padding: 5px 12px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: #52525b;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.viewer-group button:hover {
+    color: #18181b;
+}
+
+.viewer-group button.active {
+    background: white;
+    color: #18181b;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+.viewer-group button:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.viewer-canvas {
+    --fade: #e9ecf2;  /* distant points fade towards this; read by viewer.js */
+    position: relative;
+    height: min(60vh, 480px);
+    background: radial-gradient(ellipse at center, #ffffff 0%, #e9ecf2 75%);
+    cursor: crosshair;
+    overflow: hidden;
+}
+
+/* RGB | features split: a white line with a round knob, a label on each side */
+.viewer-split {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 24px;
+    margin-left: -12px;
+    cursor: ew-resize;
+    touch-action: none;
+}
+
+.viewer-split::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 11px;
+    width: 2px;
+    background: white;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+}
+
+.viewer-split-knob {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 28px;
+    height: 28px;
+    margin: -14px 0 0 -14px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    color: #52525b;
+    font-size: 15px;
+    line-height: 26px;
+    text-align: center;
+}
+
+.viewer-split-knob::before {
+    content: "\2039\2009\203A";
+}
+
+.viewer-split-label {
+    position: absolute;
+    bottom: 12px;
+    right: 20px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.85);
+    color: #3f3f46;
+    font-size: 12px;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.viewer-split-label.viewer-split-mode {
+    right: auto;
+    left: 20px;
+}
+
+.viewer-canvas canvas {
+    display: block;
+}
+
+.viewer-status {
+    padding: 9px 12px;
+    font-size: 13px;
+    color: #71717a;
+}
+
+/* BibTeX: a code block with a copy button in its corner */
+.bibtex {
+    position: relative;
+}
+
+.bibtex pre {
+    margin: 0;
+    padding: 16px 18px;
+    white-space: pre-wrap;  /* wrap long lines instead of scrolling; copying keeps them whole */
+    overflow-wrap: anywhere;
+    border: 1px solid #e4e4e7;
+    border-radius: 8px;
+    background: #fafafa;
+    color: #18181b;
+}
+
+.bibtex pre,
+.bibtex code {
+    font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.bibtex button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 4px 10px;
+    border: 1px solid #e4e4e7;
+    border-radius: 6px;
+    background: white;
+    color: #71717a;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.bibtex button:hover {
+    color: #18181b;
+}
+
+/* Larger screens get larger type, in the same steps as the column width */
+#title { font-size: 30px; }
+.section p { font-size: 16px; }
+
+@media (max-width: 600px) {
+    .section p { text-align: left; }
+}
+
+@media (min-width: 992px) {
+    #title { font-size: 38px; }
+}
+
+@media (min-width: 1200px) {
+    #title { font-size: 42px; }
+    .section h2 { font-size: 30px; }
+    .section p { font-size: 17px; }
+}
+
+@media (min-width: 1600px) {
+    #title { font-size: 48px; }
+    #authors { font-size: 20px; }
+    #affiliations { font-size: 17px; }
+    .section p { font-size: 18px; }
+}
